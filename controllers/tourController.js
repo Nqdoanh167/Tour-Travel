@@ -16,32 +16,11 @@ exports.uploadTourImages = upload.fields([
    },
 ]);
 exports.resizeTourImages = catchAsync(async (req, res, next) => {
-   if (req.files.imageCover) {
-      req.body.imageCover = `tour-${Date.now()}-cover.jpeg`;
-      await sharp(req.files.imageCover[0].buffer)
-         // .resize(903, 400)
-         .toFormat('jpeg')
-         .jpeg({quality: 90})
-         .toFile(`public/img/tours/${req.body.imageCover}`);
+   if (req?.files.imageCover) {
+      req.body.imageCover = req.files.imageCover[0].path;
    }
-   if (req.files.images) {
-      let arr = [];
-      if (req.body.images && Array.isArray(req.body.images)) {
-         arr = req.body.images;
-      } else if (req.body.images) {
-         arr.push(req.body.images);
-      }
-      await Promise.all(
-         req.files.images.map(async (file, i) => {
-            const filename = `tour-${Date.now()}-${i + 1}.jpeg`;
-
-            await sharp(file.buffer).toFormat('jpeg').jpeg({quality: 90}).toFile(`public/img/tours/${filename}`);
-
-            arr.push(filename);
-            console.log('arr', arr);
-         }),
-      );
-      req.body.images = arr;
+   if (req?.files.images) {
+      req.body.images = req?.files.images.map((image) => image.path);
    }
 
    next();

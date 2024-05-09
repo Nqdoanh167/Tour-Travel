@@ -6,16 +6,9 @@ const upload = require('../utils/upload');
 const sharp = require('sharp');
 const catchAsync = require('../utils/catchAsync');
 exports.uploadUserPhoto = upload.single('photo');
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+exports.uploadUser = catchAsync(async (req, res, next) => {
    if (!req.file) return next();
-
-   req.body.photo = `user-${req.user._id}-${Date.now()}.jpeg`;
-   await sharp(req.file.buffer)
-      .resize(84, 84)
-      .toFormat('jpeg')
-      .jpeg({quality: 90})
-      .toFile(`public/img/users/${req.body.photo}`);
-
+   req.body.photo = req.file.path;
    next();
 });
 exports.getAllUser = HandleFactory.getAll(User);
