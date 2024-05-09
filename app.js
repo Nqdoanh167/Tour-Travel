@@ -37,7 +37,7 @@ app.all('*', (req, res, next) => {
 });
 app.use(globalErrorHandler);
 //connect database
-const DB = process.env.DATABASE_LOCAL;
+const DB = process.env.DATABASE_CLOUD;
 mongoose.connect(DB).then(() => {
    console.log('DB connection successfully!');
 });
