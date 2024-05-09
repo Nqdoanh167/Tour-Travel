@@ -4,6 +4,7 @@ const router = express.Router();
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
 
+router.get('/', tourController.getAllTour);
 // Top 4 tour yeu thich nhat
 router.route('/top-8').get(tourController.getTopTours, tourController.getAllTour);
 //getTour by slug
@@ -13,7 +14,6 @@ router.route('/id/:id').get(tourController.getTour);
 router.use(authController.protect);
 router
    .route('/')
-   .get(tourController.getAllTour)
    .post(
       authController.restrictTo('admin', 'lead-guide'),
       tourController.uploadTourImages,
