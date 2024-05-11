@@ -74,3 +74,12 @@ exports.getGuide = catchAsync(async (req, res, next) => {
       data: allGuide,
    });
 });
+exports.getManyUser = catchAsync(async (req, res, next) => {
+   const ids = req.body;
+   const users = await User.find({_id: {$in: ids}});
+   res.status(200).json({
+      status: 'success',
+      results: users.length,
+      data: users,
+   });
+});

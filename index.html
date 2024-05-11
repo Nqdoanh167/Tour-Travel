@@ -1,0 +1,39 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+   </head>
+   <body>
+      <h1>App chat sieu nhanh</h1>
+      <ul id="message"></ul>
+      <form action="" id="chat-form">
+         <input type="text" id="chat-mes" />
+         <button id="send-chat">Gui</button>
+      </form>
+   </body>
+</html>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+   const socket = io();
+   const name = prompt();
+   const chatForm = document.querySelector('#chat-form');
+   const chatMes = document.querySelector('#chat-mes');
+
+   chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const message = chatMes.value;
+      socket.emit('send-chat', {name, message});
+      chatMes.value = '';
+   });
+
+   const messages = document.querySelector('#message');
+   socket.on('user-chat', (message) => {
+      const chatItem = document.createElement('li');
+      chatItem.textContent = `${message.name}  ${message.message}`;
+      messages.appendChild(chatItem);
+   });
+</script>
