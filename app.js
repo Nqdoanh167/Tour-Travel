@@ -12,7 +12,7 @@ const tourRoute = require('./routes/tourRoute');
 const userRoute = require('./routes/userRoute');
 const reviewRoute = require('./routes/reviewRoute');
 const bookingRoute = require('./routes/bookingRoute');
-const chatRoute = require('./routes/chatRoute');
+const conversationRoute = require('./routes/conversationRoute');
 const messageRoute = require('./routes/messageRoute');
 
 const globalErrorHandler = require('./controllers/errorController');
@@ -38,7 +38,7 @@ app.use('/api/v1/tour', tourRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/review', reviewRoute);
 app.use('/api/v1/booking', bookingRoute);
-app.use('/api/v1/chat', chatRoute);
+app.use('/api/v1/conversation', conversationRoute);
 app.use('/api/v1/message', messageRoute);
 
 // handle error route
@@ -66,13 +66,20 @@ io.on('connection', (socket) => {
    console.log('Socket connection successfully!');
    socket.on('addNewUser', (userId) => {
       if (userId) {
-         !onlineUsers.some((user) => user.userId === userId) &&
+         console.log('onlineUsers', onlineUsers);
+         console.log('userId', userId);
+         const checkLogout = onlineUsers.some((user) => user.userId === userId);
+         if (checkLogout) {
+            console.log('logout');
+            io.emit('logout', userId);
+         } else {
             onlineUsers.push({
                userId,
                socketId: socket.id,
             });
+            io.emit('getOnlineUsers', onlineUsers);
+         }
       }
-      io.emit('getOnlineUsers', onlineUsers);
    });
    socket.on('sendMessage', (message) => {
       const user = onlineUsers.filter((userOnline) => userOnline.userId === message.receiveId);

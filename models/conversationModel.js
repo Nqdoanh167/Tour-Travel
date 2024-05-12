@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const AppError = require('../utils/appError');
 
-const chatSchema = new mongoose.Schema(
+const conversationSchema = new mongoose.Schema(
    {
       members: [
          {
@@ -23,17 +23,17 @@ const chatSchema = new mongoose.Schema(
       },
    },
 );
-chatSchema.virtual('messages', {
+conversationSchema.virtual('messages', {
    ref: 'Message',
-   foreignField: 'chatId',
+   foreignField: 'conversationId',
    localField: '_id',
 });
-chatSchema.pre('save', function (next) {
+conversationSchema.pre('save', function (next) {
    if (this.members.length > 2) {
       return next(new AppError('Số lượng user không được vượt quá 2'));
    } else {
       next();
    }
 });
-const Chat = mongoose.model('Chat', chatSchema);
-module.exports = Chat;
+const Conversation = mongoose.model('Conversation', conversationSchema);
+module.exports = Conversation;

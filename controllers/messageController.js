@@ -1,39 +1,31 @@
 /** @format */
 const Message = require('../models/messageModel');
-const Chat = require('../models/chatModel');
+const Conversation = require('../models/conversationModel');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 exports.createMessage = catchAsync(async (req, res, next) => {
-   const {chatId, text} = req.body;
-   const chat = await Chat.findById(chatId);
-   if (!chat) return next(new AppError('Conversation is not found'), 404);
-   const message = await Message.create({chatId, senderId: req.user._id, text});
+   const {conversationId, text} = req.body;
+   const message = await Message.create({conversationId, senderId: req.user._id, text});
    res.status(201).json({
       status: 'success',
-      data: {
-         message,
-      },
+      data: message,
    });
 });
 exports.getMessages = catchAsync(async (req, res, next) => {
-   const {chatId} = req.params;
-   const messages = await Message.find({chatId});
+   const {conversationId} = req.params;
+   const messages = await Message.find({conversationId});
    res.status(200).json({
       status: 'success',
-      data: {
-         messages,
-      },
+      data: messages,
    });
 });
-exports.updateStatusMassgeOnChat = catchAsync(async (req, res, next) => {
-   const {receiveId, chatId} = req.body;
+exports.updateStatusMassgeOnConversation = catchAsync(async (req, res, next) => {
+   const {receiveId, conversationId} = req.body;
    const messages = await Message.updateMany(
       {
-         chatId: chatId,
-         senderId: {
-            $ne: receiveId,
-         },
+         conversationId,
+         receiveId,
       },
       {seen: true},
       {
@@ -43,6 +35,5 @@ exports.updateStatusMassgeOnChat = catchAsync(async (req, res, next) => {
    );
    res.status(200).json({
       status: 'update success',
-      data: messages,
    });
 });

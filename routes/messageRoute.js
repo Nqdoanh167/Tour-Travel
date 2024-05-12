@@ -8,7 +8,7 @@ const messageController = require('../controllers/messageController');
 router.use(authController.protect);
 
 router.post('/', messageController.createMessage);
-router.get('/:chatId', messageController.getMessages);
-router.post('/update-status', messageController.updateStatusMassgeOnChat);
+router.get('/:conversationId', messageController.getMessages);
+router.post('/update-status', messageController.updateStatusMassgeOnConversation);
 
 module.exports = router;
