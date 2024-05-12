@@ -15,6 +15,8 @@ router.use(authController.protect);
 //crud user by me
 router.patch('/updateMyPassword', authController.updatePassword);
 router.get('/me', userController.getMe, userController.getUser);
+router.get('/get-admin', userController.getAdmin);
+
 router.patch('/updateMe', userController.uploadUserPhoto, userController.uploadUser, userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
 
@@ -22,7 +24,7 @@ router.post('/get-many-user', userController.getManyUser);
 //crud user by admin
 router.use(authController.restrictTo('admin'));
 router.get('/get-guide', userController.getGuide);
-
+router.get('/get-all-id', userController.getAllId);
 router
    .route('/')
    .get(userController.getAllUser)

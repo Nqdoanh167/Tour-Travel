@@ -12,7 +12,7 @@ exports.updateReview = HandleFactory.updateOne(Review);
 exports.deleteReview = HandleFactory.deleteOne(Review);
 exports.getAllReviewOnTour = catchAsync(async (req, res, next) => {
    const features = new APIFeatures(
-      Review.find({tour: req.params.idTour}).populate({path: 'user', select: 'name'}),
+      Review.find({tour: req.params.idTour}).populate({path: 'user', select: 'name photo'}),
       req.query,
    )
       .filter()

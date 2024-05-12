@@ -83,3 +83,33 @@ exports.getManyUser = catchAsync(async (req, res, next) => {
       data: users,
    });
 });
+exports.getAllId = catchAsync(async (req, res, next) => {
+   const adminId = req.user._id;
+   const userIds = await User.aggregate([
+      {
+         $group: {
+            _id: null,
+            ids: {
+               $addToSet: {
+                  $cond: {
+                     if: {$eq: ['$_id', adminId]},
+                     then: '$$REMOVE',
+                     else: '$_id',
+                  },
+               },
+            },
+         },
+      },
+   ]);
+   res.status(200).json({
+      status: 'success',
+      data: userIds[0]?.ids,
+   });
+});
+exports.getAdmin = catchAsync(async (req, res, next) => {
+   const admin = await User.findOne({role: 'admin'});
+   res.status(200).json({
+      status: 'success',
+      data: admin,
+   });
+});
