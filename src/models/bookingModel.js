@@ -1,6 +1,7 @@
 /** @format */
 
 const mongoose = require('mongoose');
+const Tour = require('./tourModel');
 
 const bookingSchema = new mongoose.Schema(
    {
@@ -65,12 +66,15 @@ bookingSchema.virtual('nameTour', {
       return this.tour ? this.tour.name : null;
    },
 });
-const Booking = mongoose.model('Booking', bookingSchema);
-
-module.exports = Booking;
-
+bookingSchema.pre('save', async function (next) {
+   const tour = await Tour.findById(this.tour);
+   const newStartDates = tour.startDates.filter((date) => date.getTime() !== this.startDate.getTime());
+   console.log('newStartDates', newStartDates);
+   await Tour.findByIdAndUpdate(this.tour, {startDates: newStartDates});
+   next();
+});
 // bookingSchema.pre(/^find/, function (next) {
-//    this.model.aggregate([
+//    this.model.find([
 //       {
 //          $lookup: {
 //             from: 'tours',
@@ -111,3 +115,6 @@ module.exports = Booking;
 //    ]);
 //    next();
 // });
+const Booking = mongoose.model('Booking', bookingSchema);
+
+module.exports = Booking;

@@ -3,9 +3,11 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 
-exports.getAll = (Model) =>
+exports.getAll = (Model, query) =>
    catchAsync(async (req, res, next) => {
-      const features = new APIFeatures(Model.find(), req.query).filter().sort().limitFields().paginate();
+      let queryData = {};
+      if (query) queryData = query;
+      const features = new APIFeatures(Model.find(queryData), req.query).filter().sort().limitFields().paginate();
       const docs = await features.query;
       const total = await Model.countDocuments();
       res.status(200).json({

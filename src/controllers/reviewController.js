@@ -4,12 +4,14 @@ const HandleFactory = require('../controllers/handleFactory');
 const catchAsync = require('../utils/catchAsync');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
+const {default: mongoose} = require('mongoose');
+const Tour = require('../models/tourModel');
 
 exports.getAllReview = HandleFactory.getAll(Review);
-exports.createReview = HandleFactory.createOne(Review);
 exports.getReview = HandleFactory.getOne(Review);
 exports.updateReview = HandleFactory.updateOne(Review);
 exports.deleteReview = HandleFactory.deleteOne(Review);
+exports.createReview = HandleFactory.createOne(Review);
 exports.getAllReviewOnTour = catchAsync(async (req, res, next) => {
    const features = new APIFeatures(
       Review.find({tour: req.params.idTour}).populate({path: 'user', select: 'name photo'}),

@@ -2,7 +2,6 @@
 const Tour = require('../models/tourModel');
 const HandleFactory = require('../controllers/handleFactory');
 const upload = require('../utils/upload');
-const sharp = require('sharp');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 exports.uploadTourImages = upload.fields([
@@ -25,7 +24,11 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 
    next();
 });
-exports.getAllTour = HandleFactory.getAll(Tour);
+exports.getAllTour = HandleFactory.getAll(Tour, {
+   startDates: {
+      $ne: [],
+   },
+});
 exports.createTour = HandleFactory.createOne(Tour);
 exports.updateTour = HandleFactory.updateOne(Tour);
 exports.deleteTour = HandleFactory.deleteOne(Tour);

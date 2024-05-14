@@ -3,7 +3,6 @@
 const User = require('../models/userModel');
 const HandleFactory = require('../controllers/handleFactory');
 const upload = require('../utils/upload');
-const sharp = require('sharp');
 const catchAsync = require('../utils/catchAsync');
 exports.uploadUserPhoto = upload.single('photo');
 exports.uploadUser = catchAsync(async (req, res, next) => {
