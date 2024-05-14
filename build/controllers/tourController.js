@@ -41,7 +41,11 @@ exports.resizeTourImages = catchAsync( /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }());
-exports.getAllTour = HandleFactory.getAll(Tour);
+exports.getAllTour = HandleFactory.getAll(Tour, {
+  startDates: {
+    $ne: []
+  }
+});
 exports.createTour = HandleFactory.createOne(Tour);
 exports.updateTour = HandleFactory.updateOne(Tour);
 exports.deleteTour = HandleFactory.deleteOne(Tour);

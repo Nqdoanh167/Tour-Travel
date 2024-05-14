@@ -102,5 +102,9 @@ tourSchema.pre('save', function (next) {
   });
   next();
 });
+tourSchema.pre('populate', function (next) {
+  this.model.aggreate([{}]);
+  next();
+});
 var Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;

@@ -10,11 +10,14 @@ var HandleFactory = require('../controllers/handleFactory');
 var catchAsync = require('../utils/catchAsync');
 var APIFeatures = require('../utils/apiFeatures');
 var AppError = require('../utils/appError');
+var _require = require('mongoose'),
+  mongoose = _require["default"];
+var Tour = require('../models/tourModel');
 exports.getAllReview = HandleFactory.getAll(Review);
-exports.createReview = HandleFactory.createOne(Review);
 exports.getReview = HandleFactory.getOne(Review);
 exports.updateReview = HandleFactory.updateOne(Review);
 exports.deleteReview = HandleFactory.deleteOne(Review);
+exports.createReview = HandleFactory.createOne(Review);
 exports.getAllReviewOnTour = catchAsync( /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res, next) {
     var features, datas, total;

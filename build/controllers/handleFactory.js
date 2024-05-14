@@ -8,21 +8,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var catchAsync = require('../utils/catchAsync');
 var AppError = require('../utils/appError');
 var APIFeatures = require('../utils/apiFeatures');
-exports.getAll = function (Model) {
+exports.getAll = function (Model, query) {
   return catchAsync( /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res, next) {
-      var features, docs, total;
+      var queryData, features, docs, total;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            features = new APIFeatures(Model.find(), req.query).filter().sort().limitFields().paginate();
-            _context.next = 3;
+            queryData = {};
+            if (query) queryData = query;
+            features = new APIFeatures(Model.find(queryData), req.query).filter().sort().limitFields().paginate();
+            _context.next = 5;
             return features.query;
-          case 3:
+          case 5:
             docs = _context.sent;
-            _context.next = 6;
+            _context.next = 8;
             return Model.countDocuments();
-          case 6:
+          case 8:
             total = _context.sent;
             res.status(200).json({
               status: 'success',
@@ -30,7 +32,7 @@ exports.getAll = function (Model) {
               total: total,
               data: docs
             });
-          case 8:
+          case 10:
           case "end":
             return _context.stop();
         }
